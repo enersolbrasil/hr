@@ -16,7 +16,7 @@
                 <button
                     type="object"
                     name="action_view_ppe_report"
-                    string="Print Receipt of PPE"
+                    string="Print PPE Receipt"
                     groups="hr.group_hr_user"
                     invisible="(not contains_ppe) or state not in ['draft', 'accepted']"
                 />
@@ -25,16 +25,37 @@
                 expr="//group[@name='employee']//field[@name='employee_id']"
                 position="after"
             >
-                <field name="contains_ppe" invisible="1" string="Contains PPE" />
+                <field name="contains_ppe" invisible="1" />
+            </xpath>
+            <xpath expr="//field[@name='line_ids']//list//field[@name='product_uom_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
             </xpath>
             <xpath expr="//notebook//field[@name='product_id']" position="after">
-                <field name="is_ppe" string="Is PPE" />
-                <field name="indications" invisible="1" />
+                <field name="is_ppe" column_invisible="True" />
+                <field name="indications" column_invisible="True" />
             </xpath>
             <xpath expr="//notebook//field[@name='start_date']" position="after">
-                <field name="expire_ppe" string="Expirable" />
-                <field name="expiry_date" />
-                <field name="certification" groups="hr.group_hr_user" />
+                <field name="expire_ppe" column_invisible="True" />
+                <field name="expiry_date" string="Expiry Date" />
+                <field name="certification" string="Certification No." groups="hr.group_hr_user" />
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Signature &amp; Terms" name="signature_page" invisible="not contains_ppe">
+                    <group>
+                        <group string="Employee Digital Signature">
+                            <field name="employee_signature" widget="signature" readonly="state == 'cancelled'" />
+                            <field name="signed_on" readonly="1" invisible="not signed_on" />
+                        </group>
+                        <group string="Terms of Responsibility">
+                            <div class="text-muted">
+                                <p>
+                                    By signing, the employee acknowledges receipt of the listed PPE
+                                    and assumes responsibility for its proper custody, care, and mandatory use.
+                                </p>
+                            </div>
+                        </group>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

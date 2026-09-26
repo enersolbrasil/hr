@@ -12,5 +12,4 @@
     "summary": "Age field for employee",
     "depends": ["hr"],
     "data": ["views/hr_employee.xml"],
-    "installable": True,
 }

@@ -9,8 +9,6 @@
     "website": "https://github.com/OCA/hr",
     "author": "CorporateHub, Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "installable": True,
-    "application": False,
     "summary": (
         "Employee service information & duration based on employee's contracts"
     ),

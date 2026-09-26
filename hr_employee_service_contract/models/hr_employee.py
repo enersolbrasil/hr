@@ -12,7 +12,6 @@ class HrEmployee(models.Model):
         compute="_compute_first_contract_id",
         store=True,
         prefetch=False,
-        string="First Contract",
         help="First contract of the employee",
     )
     last_contract_id = fields.Many2one(
@@ -20,7 +19,6 @@ class HrEmployee(models.Model):
         compute="_compute_last_contract_id",
         store=True,
         prefetch=False,
-        string="Last Contract",
         help="Last contract of the employee",
     )
     service_start_date = fields.Date(
@@ -38,18 +36,38 @@ class HrEmployee(models.Model):
 
     @api.depends("contract_ids", "contract_ids.state", "contract_ids.date_start")
     def _compute_first_contract_id(self):
-        Contract = self.env["hr.contract"]
+        states = self._get_service_contract_states()
         for employee in self:
-            employee.first_contract_id = Contract.search(
-                employee._get_contract_filter(), order="date_start asc", limit=1
+            valid_contracts = employee.contract_ids.filtered(
+                lambda c: c.state in states and c.date_start
+            )
+            employee.first_contract_id = (
+                valid_contracts.sorted("date_start")[:1] if valid_contracts else False
             )
 
-    @api.depends("contract_ids", "contract_ids.state", "contract_ids.date_end")
+    @api.depends(
+        "contract_ids",
+        "contract_ids.state",
+        "contract_ids.date_end",
+        "contract_ids.date_start",
+    )
     def _compute_last_contract_id(self):
-        Contract = self.env["hr.contract"]
+        states = self._get_service_contract_states()
+        far_future = fields.Date.to_date("9999-12-31")
         for employee in self:
-            employee.last_contract_id = Contract.search(
-                employee._get_contract_filter(), order="date_end desc", limit=1
+            valid_contracts = employee.contract_ids.filtered(
+                lambda c: c.state in states and c.date_start
+            )
+            employee.last_contract_id = (
+                valid_contracts.sorted(
+                    lambda c: (
+                        c.date_end or far_future,
+                        c.date_start or fields.Date.to_date("1900-01-01"),
+                    ),
+                    reverse=True,
+                )[:1]
+                if valid_contracts
+                else False
             )
 
     @api.onchange("service_hire_date")

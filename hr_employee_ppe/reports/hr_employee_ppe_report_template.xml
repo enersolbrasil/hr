@@ -4,67 +4,137 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc" t-if="doc.contains_ppe">
                 <t t-call="web.external_layout">
-                    <div class="page">
-                        <h3
-                            class="text-center"
-                        >Receipt of Personal Protection Equipment</h3>
-                        <br />
-                        <div name="employee_name">
-                            <span
-                            t-field="doc.employee_id.company_id.name"
-                        /> is providing <u>
-                            <span t-field="doc.employee_id.name" />
-                        </u> with the following Personal Protection Equipment (PPE):
+                    <div class="page" style="font-family: sans-serif; font-size: 0.88rem; color: #212529;">
+                        <!-- Cabeçalho -->
+                        <div class="text-center mb-3">
+                            <h4 class="fw-bold mb-1">RECEIPT AND CONTROL OF PERSONAL PROTECTIVE EQUIPMENT (PPE)</h4>
+                            <p class="text-muted small mb-0">
+                                Acknowledgment of receipt, custody terms, and conditions of use
+                            </p>
                         </div>
-                        <br />
-                        <table class="table table-condensed">
+
+                        <!-- Dados da Empresa e do Colaborador -->
+                        <table class="table table-sm table-bordered mb-3" style="font-size: 0.85rem;">
                             <tbody>
-                                <div>
-                                    <t>
-                                        <tr>
-                                            <th>
-                                           Product
-                                       </th>
-                                            <th>
-                                           Quantity
-                                       </th>
-                                            <th>
-                                           Indications
-                                       </th>
-                                        </tr>
-                                        <tr
-                                            t-foreach="doc.line_ids"
-                                            t-as="line"
-                                            t-if="line.is_ppe"
-                                        >
-                                            <td>
-                                                <t t-out="line.product_id.name" />
-                                            </td>
-                                            <td>
-                                                <t t-out="line.quantity" />
-                                            </td>
-                                            <td>
-                                                <t t-out="line.indications" />
-                                            </td>
-                                        </tr>
-                                    </t>
-                                </div>
+                                <tr>
+                                    <td class="bg-light fw-bold" style="width: 18%;">Company:</td>
+                                    <td style="width: 42%;"><span t-field="doc.employee_id.company_id.name" /></td>
+                                    <td class="bg-light fw-bold" style="width: 15%;">Tax ID:</td>
+                                    <td style="width: 25%;">
+                                        <span t-out="doc.employee_id.company_id.partner_id.vat or doc.employee_id.company_id.vat or '-'" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="bg-light fw-bold">Employee:</td>
+                                    <td><strong t-field="doc.employee_id.name" /></td>
+                                    <td class="bg-light fw-bold">ID / SSN:</td>
+                                    <td><span t-out="doc.employee_id.identification_id or '-'" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="bg-light fw-bold">Job Position:</td>
+                                    <td><span t-out="doc.employee_id.job_id.name or doc.employee_id.job_title or '-'" /></td>
+                                    <td class="bg-light fw-bold">Department:</td>
+                                    <td><span t-out="doc.employee_id.department_id.name or '-'" /></td>
+                                </tr>
                             </tbody>
                         </table>
-                        <p>
-                            I, the undersigned accept the PPE that my employer is providing to me. I further acknowledge that I have been instructed
-                            in how to wear and maintain it. If it is lost or damaged, I will report the same to my employer promptly for replacement.
-                        </p>
-                        <p>
-                            I agree to wear the equipment when facing the exposure it is designed to protect against.
-                            I acknowledge that my failure to do so may subject me to disciplinary action.
-                        </p>
-                        <div class="row">
-                            <div class="col-4 text-left">
-                                <span>Signature:</span>
+
+                        <!-- Termo de Compromisso e Responsabilidade -->
+                        <div class="p-2 mb-3 border rounded bg-light" style="font-size: 0.80rem; line-height: 1.35;">
+                            <div class="fw-bold text-center text-uppercase mb-1">
+                                Terms of Responsibility and Custody of Personal Protective Equipment
                             </div>
-                            <div class="col-4 text-right">
-                                <span>Date:</span>
+                            <p class="mb-1 text-justify">
+                                I declare that I have received from the company the Personal Protective Equipment (PPE) listed below, in proper working order and with valid safety certification, along with all necessary instructions and training on its correct use, maintenance, and storage.
+                            </p>
+                            <p class="mb-0 text-justify">
+                                <strong>I agree to:</strong>
+                                <strong>a)</strong> Use the PPE solely for the purpose for which it is intended;
+                                <strong>b)</strong> Be responsible for its proper care and storage;
+                                <strong>c)</strong> Promptly notify the employer of any damage or alteration rendering it unfit for use;
+                                <strong>d)</strong> Return the equipment upon termination of employment or when replaced;
+                                <strong>e)</strong> Acknowledge that unwarranted refusal to wear the mandatory PPE may result in disciplinary action.
+                            </p>
+                        </div>
+
+                        <!-- Tabela de EPIs Fornecidos -->
+                        <table class="table table-sm table-bordered text-center align-middle mb-4" style="font-size: 0.83rem;">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th style="width: 5%;">Item</th>
+                                    <th class="text-start" style="width: 33%;">Description of PPE</th>
+                                    <th style="width: 12%;">Certification No.</th>
+                                    <th style="width: 7%;">Qty</th>
+                                    <th style="width: 13%;">Delivery Date</th>
+                                    <th style="width: 13%;">Expected Expiry</th>
+                                    <th style="width: 17%;">Signature / Initial</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    t-foreach="doc.line_ids.filtered(lambda l: l.is_ppe)"
+                                    t-as="line"
+                                >
+                                    <td><t t-out="line_index + 1" /></td>
+                                    <td class="text-start">
+                                        <strong t-out="line.product_id.name" />
+                                        <t t-if="line.indications">
+                                            <div class="text-muted small"><t t-out="line.indications" /></div>
+                                        </t>
+                                    </td>
+                                    <td><span t-out="line.certification or line.product_id.ca_number or '-'" /></td>
+                                    <td><span t-out="line.quantity" /></td>
+                                    <td><span t-field="line.start_date" /></td>
+                                    <td><span t-field="line.expiry_date" /></td>
+                                    <td>
+                                        <t t-if="line.employee_signature">
+                                            <img
+                                                t-att-src="image_data_uri(line.employee_signature)"
+                                                style="max-height: 30px; max-width: 90px;"
+                                                alt="Signature"
+                                            />
+                                        </t>
+                                        <t t-elif="doc.employee_signature">
+                                            <img
+                                                t-att-src="image_data_uri(doc.employee_signature)"
+                                                style="max-height: 30px; max-width: 90px;"
+                                                alt="Signature"
+                                            />
+                                        </t>
+                                        <t t-else="">
+                                            <div style="border-bottom: 1px solid #555; height: 20px; margin: 0 5px;" />
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Seção de Assinaturas -->
+                        <div class="row mt-4 pt-2">
+                            <div class="col-6 text-center">
+                                <t t-if="doc.employee_signature">
+                                    <img
+                                        t-att-src="image_data_uri(doc.employee_signature)"
+                                        style="max-height: 45px;"
+                                        alt="Digital Signature"
+                                    />
+                                    <div style="border-top: 1px solid #000; margin-top: 5px;" />
+                                </t>
+                                <t t-else="">
+                                    <div style="border-top: 1px solid #000; margin-top: 35px;" />
+                                </t>
+                                <strong t-field="doc.employee_id.name" /><br />
+                                <span class="small text-muted">Employee Signature</span>
+                                <t t-if="doc.signed_on">
+                                    <div class="small text-muted">
+                                        Signed on <span t-field="doc.signed_on" />
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div style="border-top: 1px solid #000; margin-top: 35px;" />
+                                <strong>Safety Officer / Issuer</strong><br />
+                                <span class="small text-muted"><span t-field="doc.employee_id.company_id.name" /></span>
                             </div>
                         </div>
                     </div>

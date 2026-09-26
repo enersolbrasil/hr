@@ -16,7 +16,7 @@
         </field>
     </record>
     <!-- FORM -->
-    <record model="ir.ui.view" id="hr_personal_equipment_form_view">
+    <record id="hr_personal_equipment_form_view" model="ir.ui.view">
         <field name="name">hr.personal.equipment.form (in hr_employee_ppe)</field>
         <field name="model">hr.personal.equipment</field>
         <field
@@ -62,9 +62,14 @@
                         readonly="state not in ['draft','accepted']"
                     />
                 </group>
+                <group string="Employee Signature" invisible="not is_ppe">
+                    <field name="employee_signature" widget="signature" readonly="state in ['expired', 'cancelled']" />
+                    <field name="signed_on" readonly="1" invisible="not signed_on" />
+                </group>
             </xpath>
         </field>
     </record>
+
     <record id="hr_personal_equipment_form_view_base_user" model="ir.ui.view">
         <field name="name">hr.personal.equipment.form (in hr_employee_ppe)</field>
         <field name="model">hr.personal.equipment</field>
@@ -73,10 +78,6 @@
             ref="hr_employee_ppe.hr_personal_equipment_form_view"
         />
         <field name="arch" type="xml">
-            <field name="expire_ppe" position="attributes">
-                <attribute name="readonly">True</attribute>
-                <attribute name="groups">base.group_user</attribute>
-            </field>
             <field name="expire_ppe" position="attributes">
                 <attribute name="readonly">True</attribute>
                 <attribute name="groups">base.group_user</attribute>
@@ -93,6 +94,62 @@
                 <attribute name="readonly">True</attribute>
                 <attribute name="groups">base.group_user</attribute>
             </field>
+        </field>
+    </record>
+
+    <!-- KANBAN -->
+    <record id="hr_personal_equipment_kanban_view" model="ir.ui.view">
+        <field name="name">hr.personal.equipment.kanban (in hr_employee_ppe)</field>
+        <field name="model">hr.personal.equipment</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" sample="1">
+                <field name="state" />
+                <field name="is_ppe" />
+                <field name="expire_ppe" />
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong class="o_kanban_record_title"><field name="product_id" /></strong>
+                            <span class="badge text-bg-light"><field name="quantity" /> un</span>
+                        </div>
+                        <div class="text-muted small mb-1">
+                            <i class="fa fa-user me-1" /> <field name="employee_id" />
+                        </div>
+                        <div class="text-muted small mb-1" invisible="not certification">
+                            <i class="fa fa-shield me-1" /> Cert.: <field name="certification" />
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2 pt-1 border-top small">
+                            <span>Delivery: <field name="start_date" /></span>
+                            <span invisible="not expiry_date" class="text-end">
+                                Exp.: <field name="expiry_date" />
+                            </span>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- EMPLOYEE FORM: Safety & PPE Tab -->
+    <record id="hr_employee_form_view_ppe" model="ir.ui.view">
+        <field name="name">hr.employee.form.ppe (in hr_employee_ppe)</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Safety &amp; PPE" name="ppe_management" groups="hr.group_hr_user">
+                    <field name="personal_equipment_ids" readonly="1">
+                        <list decoration-danger="state == 'expired'" decoration-warning="state == 'accepted'" decoration-success="state == 'valid'">
+                            <field name="product_id" string="PPE / Equipment" />
+                            <field name="certification" string="Certification No." />
+                            <field name="quantity" string="Qty" />
+                            <field name="start_date" string="Delivery Date" />
+                            <field name="expiry_date" string="Expiry Date" />
+                            <field name="state" widget="badge" decoration-danger="state == 'expired'" decoration-success="state == 'valid'" />
+                        </list>
+                    </field>
+                </page>
+            </xpath>
         </field>
     </record>
 </odoo>

@@ -7,7 +7,7 @@ from odoo import models
 class StockRule(models.Model):
     _inherit = "stock.rule"
 
-    def _get_stock_move_values(
+    def _get_stock_move_values(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         product_id,
         product_qty,

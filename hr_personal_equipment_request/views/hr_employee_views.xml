@@ -16,19 +16,19 @@
                 >
                     <field
                         name="equipment_request_count"
-                        string="PE Request"
+                        string="PPE Requests"
                         widget="statinfo"
                     />
                 </button>
                 <button
                     name="action_open_personal_equipment"
                     type="object"
-                    icon="fa-briefcase"
+                    icon="fa-shield"
                     invisible="personal_equipment_count == 0"
                 >
                     <field
                         name="personal_equipment_count"
-                        string="PE"
+                        string="PPE in Use"
                         widget="statinfo"
                     />
                 </button>

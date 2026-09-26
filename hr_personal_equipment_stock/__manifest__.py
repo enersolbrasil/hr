@@ -17,8 +17,6 @@
         "views/hr_personal_equipment.xml",
         "views/hr_personal_equipment_request.xml",
         "views/stock_picking.xml",
+        "views/res_config_settings_views.xml",
     ],
-    "auto_install": True,
-    "installable": True,
-    "application": False,
 }

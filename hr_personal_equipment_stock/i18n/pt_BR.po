@@ -1,0 +1,120 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_personal_equipment_stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-25 19:00+0000\n"
+"PO-Revision-Date: 2026-09-25 19:00+0000\n"
+"Last-Translator: Antigravity <support@enersolbrasil.com.br>\n"
+"Language-Team: Portuguese (Brazil)\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model,name:hr_personal_equipment_stock.model_hr_personal_equipment
+msgid "Adds personal equipment information and allocation"
+msgstr "Adiciona informações e alocação de equipamentos de proteção/trabalho"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment__qty_delivered
+msgid "Delivered Quantity"
+msgstr "Quantidade Entregue"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_stock_move__personal_equipment_id
+msgid "Employee Personal Equipment"
+msgstr "EPI / Equipamento do Colaborador"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_procurement_group__equipment_request_id
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_stock_picking__equipment_request_id
+msgid "Equipment Request"
+msgstr "Solicitação de Equipamento"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model,name:hr_personal_equipment_stock.model_stock_location
+msgid "Inventory Locations"
+msgstr "Locais de Inventário"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_stock_location__is_personal_equipment_location
+msgid "Is personal equipment location?"
+msgstr "É local de equipamento pessoal?"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment__location_id
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment_request__location_id
+msgid "Location"
+msgstr "Local de Estoque"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment_request__picking_ids
+msgid "Picking"
+msgstr "Separação / Entrega"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment_request__picking_count
+msgid "Picking Count"
+msgstr "Total de Transferências"
+
+#. module: hr_personal_equipment_stock
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_stock.hr_personal_equipment_request_form_view_picking
+msgid "Pickings"
+msgstr "Entregas de Estoque"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model,name:hr_personal_equipment_stock.model_procurement_group
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment__procurement_group_id
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment_request__procurement_group_id
+msgid "Procurement Group"
+msgstr "Grupo de Aquisição"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment__skip_procurement
+msgid "Skip Procurement"
+msgstr "Ignorar Baixa de Estoque"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model,name:hr_personal_equipment_stock.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento de Estoque"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_hr_personal_equipment__move_ids
+msgid "Stock Moves"
+msgstr "Movimentos de Estoque"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model,name:hr_personal_equipment_stock.model_stock_picking
+msgid "Transfer"
+msgstr "Transferência"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_company__ppe_source_location_id
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_config_settings__ppe_source_location_id
+msgid "Default PPE Source Location"
+msgstr "Local de Saída Padrão de EPI"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_company__ppe_dest_location_id
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_config_settings__ppe_dest_location_id
+msgid "Default PPE Destination Location"
+msgstr "Local de Destino Padrão (Colaborador)"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_company__ppe_picking_type_id
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_config_settings__ppe_picking_type_id
+msgid "PPE Operation Type"
+msgstr "Tipo de Operação de Entrega de EPI"
+
+#. module: hr_personal_equipment_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_company__ppe_auto_validate_stock
+#: model:ir.model.fields,field_description:hr_personal_equipment_stock.field_res_config_settings__ppe_auto_validate_stock
+msgid "Auto Validate PPE Stock Delivery"
+msgstr "Validar Entrega no Estoque Automaticamente"

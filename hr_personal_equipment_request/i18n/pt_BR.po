@@ -342,17 +342,27 @@ msgstr ""
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment_request__observations
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_request_form_view
 msgid "Observations"
-msgstr ""
+msgstr "Observações"
+
+#. module: hr_personal_equipment_request
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
+msgid "PPE in Use"
+msgstr "EPIs em Uso"
+
+#. module: hr_personal_equipment_request
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
+msgid "PPE Requests"
+msgstr "Solicitações de EPI"
 
 #. module: hr_personal_equipment_request
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
 msgid "PE"
-msgstr ""
+msgstr "EPIs em Uso"
 
 #. module: hr_personal_equipment_request
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
 msgid "PE Request"
-msgstr ""
+msgstr "Solicitações de EPI"
 
 #. module: hr_personal_equipment_request
 #. odoo-python
@@ -362,55 +372,55 @@ msgstr ""
 #: model:ir.ui.menu,name:hr_personal_equipment_request.hr_personal_equipment_menu
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_request_form_view
 msgid "Personal Equipment"
-msgstr ""
+msgstr "Equipamento de Proteção Individual (EPI)"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_employee__personal_equipment_count
 msgid "Personal Equipment Count"
-msgstr ""
+msgstr "Total de EPIs"
 
 #. module: hr_personal_equipment_request
 #: model:ir.actions.act_window,name:hr_personal_equipment_request.hr_personal_equipment_request_act_window
 #: model:ir.ui.menu,name:hr_personal_equipment_request.hr_personal_equipment_request_menu
 msgid "Personal Equipment Request"
-msgstr ""
+msgstr "Solicitações de EPI"
 
 #. module: hr_personal_equipment_request
 #. odoo-python
 #: code:addons/hr_personal_equipment_request/models/hr_personal_equipment_request.py:0
 #: code:addons/hr_personal_equipment_request/tests/test_hr_personal_equipment_request.py:0
 msgid "Personal Equipment Request by %s"
-msgstr ""
+msgstr "Solicitação de EPI de %s"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model,name:hr_personal_equipment_request.model_product_template
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__product_id
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_search_view
 msgid "Product"
-msgstr ""
+msgstr "Produto"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__quantity
 msgid "Quantity"
-msgstr ""
+msgstr "Quantidade"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__activity_user_id
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment_request__activity_user_id
 msgid "Responsible User"
-msgstr ""
+msgstr "Usuário Responsável"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__start_date
 msgid "Start Date"
-msgstr ""
+msgstr "Data de Entrega"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__state
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment_request__state
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_search_view
 msgid "State"
-msgstr ""
+msgstr "Situação"
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,help:hr_personal_equipment_request.field_hr_personal_equipment__activity_state

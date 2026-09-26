@@ -471,3 +471,142 @@ msgstr "com o seguinte Equipamento de Proteção Individual (EPI):"
 #~ msgstr ""
 #~ "Você deve informar a data de início e\n"
 #~ "                            data final para EPIs expirados."
+
+#. module: hr_employee_ppe
+#: model:ir.actions.report,name:hr_employee_ppe.hr_employee_ppe_report
+msgid "Receipt of Personal Protection Equipment"
+msgstr "Ficha de Registro de EPI (NR-06)"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_personal_equipment_request_form_view
+msgid "Print PPE Receipt"
+msgstr "Imprimir Ficha de EPI (NR-06)"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_personal_equipment_request_form_view
+msgid "Signature & Terms"
+msgstr "Assinatura & Termo NR-06"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_personal_equipment_request_form_view
+msgid "Employee Digital Signature"
+msgstr "Assinatura Digital do Colaborador"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_personal_equipment_request_form_view
+msgid "Terms of Responsibility"
+msgstr "Termo de Responsabilidade (NR-06)"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_form_view_ppe
+msgid "Safety & PPE"
+msgstr "Segurança & EPIs (NR-06)"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_form_view_ppe
+msgid "PPE / Equipment"
+msgstr "EPI / Equipamento"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_personal_equipment_request_form_view
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_form_view_ppe
+msgid "Certification No."
+msgstr "Nº CA"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_form_view_ppe
+msgid "Delivery Date"
+msgstr "Data de Entrega"
+
+#. module: hr_employee_ppe
+#. odoo-python
+#: code:addons/hr_employee_ppe/models/hr_personal_equipment.py:0
+msgid "PPE Renewal: %s"
+msgstr "Renovação de EPI: %s"
+
+#. module: hr_employee_ppe
+#. odoo-python
+#: code:addons/hr_employee_ppe/models/hr_personal_equipment.py:0
+msgid "The PPE '%(product)s' has an expired certification (Certificate %(ca)s) as of %(date)s. Delivery is blocked."
+msgstr "O EPI '%(product)s' possui Certificado de Aprovação (CA nº %(ca)s) vencido no Ministério do Trabalho em %(date)s. Entrega proibida pela NR-06."
+
+#. module: hr_employee_ppe
+#. odoo-python
+#: code:addons/hr_employee_ppe/models/hr_personal_equipment.py:0
+msgid "Employee signature is required to validate PPE delivery for '%s'."
+msgstr "A assinatura do colaborador é obrigatória para validar a entrega do EPI '%s'."
+
+#. module: hr_employee_ppe
+#. odoo-python
+#: code:addons/hr_employee_ppe/models/hr_personal_equipment.py:0
+msgid "PPE expired on %s. The equipment must be replaced immediately."
+msgstr "EPI expirado em %s. Conforme a NR-06, o equipamento deve ser substituído imediatamente."
+
+#. module: hr_employee_ppe
+#. odoo-python
+#: code:addons/hr_employee_ppe/models/hr_personal_equipment.py:0
+msgid "The PPE '%(product)s' for employee %(employee)s expires on %(date)s. Please arrange for a preventive replacement."
+msgstr "O EPI '%(product)s' do colaborador %(employee)s vence em %(date)s. Providencie a substituição preventiva conforme exigência da NR-06."
+
+#. module: hr_employee_ppe
+#. odoo-python
+#: code:addons/hr_employee_ppe/models/hr_personal_equipment_request.py:0
+msgid "Employee signature is required to accept and deliver PPE for request '%s'."
+msgstr "A assinatura do colaborador é obrigatória para aceitar e entregar os EPIs da solicitação '%s'."
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_ppe_report_template
+msgid "RECEIPT AND CONTROL OF PERSONAL PROTECTIVE EQUIPMENT (PPE)"
+msgstr "FICHA DE REGISTRO E CONTROLE DE ENTREGA DE EPI"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_ppe_report_template
+msgid "Acknowledgment of receipt, custody terms, and conditions of use"
+msgstr "Em conformidade com a Norma Regulamentadora nº 06 (NR-06) - Portaria MTP nº 4.219/2022 e Arts. 158 e 166 da CLT"
+
+#. module: hr_employee_ppe
+#: model_terms:ir.ui.view,arch_db:hr_employee_ppe.hr_employee_ppe_report_template
+msgid "Terms of Responsibility and Custody of Personal Protective Equipment"
+msgstr "Termo de Responsabilidade e Guarda de Equipamento de Proteção Individual"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_hr_personal_equipment__employee_signature
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_hr_personal_equipment_request__employee_signature
+msgid "Employee Signature"
+msgstr "Assinatura do Colaborador"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_hr_personal_equipment__signed_on
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_hr_personal_equipment_request__signed_on
+msgid "Signed On"
+msgstr "Assinado em"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_product_template__ca_number
+msgid "CA Number"
+msgstr "Número do CA"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_product_template__ca_expiry_date
+msgid "CA Expiration Date"
+msgstr "Validade do CA"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_res_config_settings__ppe_expiry_notice_days
+msgid "PPE Expiry Notice (Days)"
+msgstr "Aviso Prévio de Vencimento de EPI (Dias)"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_res_config_settings__ppe_block_expired_ca
+msgid "Block Delivery with Expired CA"
+msgstr "Bloquear Entrega com CA Vencido"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_res_config_settings__ppe_require_signature
+msgid "Require Employee Signature"
+msgstr "Exigir Assinatura do Colaborador"
+
+#. module: hr_employee_ppe
+#: model:ir.model.fields,field_description:hr_employee_ppe.field_res_config_settings__ppe_signature_method
+msgid "Signature Method"
+msgstr "Método de Assinatura"

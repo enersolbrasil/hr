@@ -1,9 +1,6 @@
 # Copyright (C) 2018-2019 Brainbean Apps (https://brainbeanapps.com)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from datetime import timedelta
-from math import fabs
-
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
@@ -62,24 +59,40 @@ class HrEmployee(models.Model):
         compute="_compute_service_duration_display",
     )
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("service_hire_date") and not vals.get("service_start_date"):
+                vals["service_start_date"] = vals["service_hire_date"]
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if vals.get("service_hire_date") and not vals.get("service_start_date"):
+            for record in self:
+                if not record.service_start_date:
+                    vals["service_start_date"] = vals["service_hire_date"]
+        return super().write(vals)
+
     @api.depends("service_start_date", "service_termination_date")
     def _compute_service_duration(self):
         for record in self:
-            service_until = record.service_termination_date or fields.Date.today()
-            if record.service_start_date and service_until > record.service_start_date:
-                service_since = record.service_start_date
-                service_duration = fabs(
-                    (service_until - service_since) / timedelta(days=1)
-                )
-                record.service_duration = int(service_duration)
+            service_until = (
+                record.service_termination_date or fields.Date.context_today(record)
+            )
+            if record.service_start_date and service_until >= record.service_start_date:
+                record.service_duration = (
+                    service_until - record.service_start_date
+                ).days
             else:
                 record.service_duration = 0
 
     @api.depends("service_start_date", "service_termination_date")
     def _compute_service_duration_display(self):
         for record in self:
-            service_until = record.service_termination_date or fields.Date.today()
-            if record.service_start_date and service_until > record.service_start_date:
+            service_until = (
+                record.service_termination_date or fields.Date.context_today(record)
+            )
+            if record.service_start_date and service_until >= record.service_start_date:
                 service_duration = relativedelta(
                     service_until, record.service_start_date
                 )

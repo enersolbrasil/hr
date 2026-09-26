@@ -4,6 +4,8 @@
 from odoo.exceptions import UserError
 from odoo.tests import TransactionCase
 
+# pylint: disable=unsubscriptable-object
+
 
 class TestHRPersonalEquipment(TransactionCase):
     @classmethod

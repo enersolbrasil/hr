@@ -8,7 +8,7 @@ from odoo.fields import Date
 class HrPersonalEquipment(models.Model):
     _name = "hr.personal.equipment"
     _description = "Adds personal equipment information and allocation"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ("mail.thread", "mail.activity.mixin")
 
     name = fields.Char(compute="_compute_name")
     product_id = fields.Many2one(

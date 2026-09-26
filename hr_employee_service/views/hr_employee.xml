@@ -32,4 +32,27 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_employee_tree_inherit_service" model="ir.ui.view">
+        <field name="name">hr.employee.view.list.service</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree" />
+        <field name="arch" type="xml">
+            <field name="work_email" position="after">
+                <field name="service_hire_date" optional="hide" />
+                <field name="service_duration_years" optional="hide" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_employee_filter_inherit_service" model="ir.ui.view">
+        <field name="name">hr.employee.view.search.service</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter" />
+        <field name="arch" type="xml">
+            <field name="job_id" position="after">
+                <field name="service_hire_date" />
+            </field>
+        </field>
+    </record>
 </odoo>

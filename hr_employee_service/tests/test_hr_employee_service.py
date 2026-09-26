@@ -16,8 +16,8 @@ class TestHrEmployeeService(common.TransactionCase):
 
         self.today = fields.Date.today()
         self.now = fields.Datetime.now()
-        self.Employee = self.env["hr.employee"]
-        self.SudoEmployee = self.Employee.sudo()
+        self.Employee = self.env["hr.employee"]  # pylint: disable=invalid-name
+        self.SudoEmployee = self.Employee.sudo()  # pylint: disable=invalid-name
 
     def test_1(self):
         employee = self.SudoEmployee.create(

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form_stock_ppe" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.stock.ppe</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr']" position="inside">
+                <block title="PPE Inventory &amp; Stock" name="ppe_stock_setting_container">
+                    <setting id="ppe_stock_location_setting" title="PPE Stock Locations" help="Default source and destination locations for PPE deliveries">
+                        <div class="content-group">
+                            <div class="row mt-1">
+                                <label for="ppe_source_location_id" class="col-lg-4" string="Source Location" />
+                                <field name="ppe_source_location_id" class="col-lg-8" />
+                            </div>
+                            <div class="row mt-1">
+                                <label for="ppe_dest_location_id" class="col-lg-4" string="Destination Location" />
+                                <field name="ppe_dest_location_id" class="col-lg-8" />
+                            </div>
+                            <div class="row mt-1">
+                                <label for="ppe_picking_type_id" class="col-lg-4" string="Operation Type" />
+                                <field name="ppe_picking_type_id" class="col-lg-8" />
+                            </div>
+                        </div>
+                    </setting>
+                    <setting id="ppe_auto_validate_setting" title="Auto Validate Delivery" help="Automatically validate stock moves when the PPE request is accepted">
+                        <field name="ppe_auto_validate_stock" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>
