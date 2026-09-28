@@ -4,7 +4,8 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import format_date
 
 
 class HrPersonalEquipment(models.Model):
@@ -24,7 +25,13 @@ class HrPersonalEquipment(models.Model):
         help="True if the PPE expires",
     )
     certification = fields.Char(
-        string="Certification Number", help="Certification Number"
+        string="Certification Number",
+        # copied from the product, so that the allocation keeps the certification
+        # of the delivered PPE when the one of the product is renewed
+        compute="_compute_certification",
+        store=True,
+        readonly=False,
+        help="Certification Number",
     )
     issued_by = fields.Many2one(comodel_name="res.users")
 
@@ -38,6 +45,36 @@ class HrPersonalEquipment(models.Model):
         for rec in self:
             rec.expire_ppe = rec.product_id.expirable_ppe
 
+    @api.depends("product_id")
+    def _compute_certification(self):
+        for rec in self:
+            rec.certification = rec.product_id.ppe_certification
+
+    def _check_ppe_certification(self):
+        """Prevent delivering PPE whose certification has expired."""
+        today = fields.Date.context_today(self)
+        for rec in self:
+            expiry_date = rec.product_id.ppe_certification_expiry_date
+            company = rec.employee_id.company_id or self.env.company
+            if (
+                rec.is_ppe
+                and expiry_date
+                and expiry_date < today
+                and company.ppe_block_expired_certification
+            ):
+                raise UserError(
+                    self.env._(
+                        "The certification of %(product)s expired on %(date)s, so "
+                        "it cannot be delivered.",
+                        product=rec.product_id.display_name,
+                        date=format_date(self.env, expiry_date),
+                    )
+                )
+
+    def _accept_request(self):
+        self._check_ppe_certification()
+        return super()._accept_request()
+
     def _validate_allocation_vals(self):
         res = super()._validate_allocation_vals()
         start_date = res.get("start_date") or self.start_date
@@ -50,6 +87,7 @@ class HrPersonalEquipment(models.Model):
         return res
 
     def validate_allocation(self):
+        self._check_ppe_certification()
         res = super().validate_allocation()
         self._check_dates()
         return res

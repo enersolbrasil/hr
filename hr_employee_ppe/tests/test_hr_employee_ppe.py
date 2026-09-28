@@ -5,7 +5,8 @@ from datetime import date, datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
 
-from odoo.exceptions import ValidationError
+from odoo import fields
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase
 
 
@@ -79,6 +80,26 @@ class TestHREmployeePPE(TransactionCase):
         self.hr_employee_ppe_expirable = self.personal_equipment_request.line_ids[0]
         self.hr_employee_ppe_no_expirable = self.personal_equipment_request.line_ids[1]
 
+    def _create_request(self, product_template):
+        return (
+            self.env["hr.personal.equipment.request"]
+            .with_user(self.user)
+            .create(
+                {
+                    "line_ids": [
+                        (
+                            0,
+                            0,
+                            {
+                                "product_id": product_template.product_variant_id.id,
+                                "quantity": 1,
+                            },
+                        )
+                    ],
+                }
+            )
+        )
+
     def test_ppe_data_from_product(self):
         self.assertTrue(self.hr_employee_ppe_expirable.is_ppe)
         self.assertTrue(self.hr_employee_ppe_expirable.expire_ppe)
@@ -99,6 +120,47 @@ class TestHREmployeePPE(TransactionCase):
         # whether the allocation expires can still be decided per allocation
         allocation.expire_ppe = False
         self.assertFalse(allocation.expire_ppe)
+
+    def test_certification_copied_from_product(self):
+        product = self.product_employee_ppe_expirable
+        product.ppe_certification = "12345"
+        allocation = self._create_request(product).line_ids
+        self.assertEqual(allocation.certification, "12345")
+        # the allocation keeps the certification of the delivered PPE
+        product.ppe_certification = "67890"
+        self.assertEqual(allocation.certification, "12345")
+        # but it can still be changed on the allocation
+        allocation.certification = "54321"
+        self.assertEqual(allocation.certification, "54321")
+        self.assertEqual(product.ppe_certification, "67890")
+
+    def test_expired_certification_blocks_delivery(self):
+        today = fields.Date.context_today(self.hr_employee_ppe_expirable)
+        self.product_employee_ppe_expirable.ppe_certification_expiry_date = (
+            today - timedelta(days=1)
+        )
+        with self.assertRaises(UserError):
+            self.personal_equipment_request.accept_request()
+        with self.assertRaises(UserError):
+            self.hr_employee_ppe_expirable.validate_allocation()
+        self.assertEqual(self.hr_employee_ppe_expirable.state, "draft")
+
+    def test_expired_certification_allowed(self):
+        today = fields.Date.context_today(self.hr_employee_ppe_expirable)
+        self.product_employee_ppe_expirable.ppe_certification_expiry_date = (
+            today - timedelta(days=1)
+        )
+        self.employee.company_id.ppe_block_expired_certification = False
+        self.personal_equipment_request.accept_request()
+        self.hr_employee_ppe_expirable.validate_allocation()
+        self.assertEqual(self.hr_employee_ppe_expirable.state, "valid")
+
+    def test_certification_valid_until_its_expiry_date(self):
+        today = fields.Date.context_today(self.hr_employee_ppe_expirable)
+        self.product_employee_ppe_expirable.ppe_certification_expiry_date = today
+        self.personal_equipment_request.accept_request()
+        self.hr_employee_ppe_expirable.validate_allocation()
+        self.assertEqual(self.hr_employee_ppe_expirable.state, "valid")
 
     def test_accept_allocation(self):
         self.assertFalse(self.hr_employee_ppe_expirable.issued_by)

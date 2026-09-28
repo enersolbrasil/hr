@@ -50,10 +50,25 @@ Installation
 To install this module, you need to have HR module installed or it will
 be requested during installation.
 
+Configuration
+=============
+
+Go to *Employees > Configuration > Settings*, section *Personal
+Protective Equipment*:
+
+- *Block PPE with Expired Certification*: when checked (the default),
+  requests and allocations of PPE whose certification has expired cannot
+  be accepted or validated.
+
 Usage
 =====
 
-
+On the PPE products, in the *Employee Personal Equipment* tab of the
+product form, set the certification number of the PPE and the expiry
+date of its certification. The certification number is copied to the
+allocations when they are created, so each allocation keeps the
+certification of the PPE that was actually delivered, even after the
+certification of the product is renewed.
 
 Bug Tracker
 ===========

@@ -32,6 +32,11 @@
                         invisible="not expirable_ppe"
                         required="expirable_ppe"
                     />
+                    <field name="ppe_certification" invisible="not is_ppe" />
+                    <field
+                        name="ppe_certification_expiry_date"
+                        invisible="not is_ppe"
+                    />
                 </group>
             </page>
         </field>
