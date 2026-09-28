@@ -22,3 +22,9 @@ msgstr ""
 #: model:ir.model,name:hr_employee_age.model_hr_employee
 msgid "Employee"
 msgstr ""
+
+#. module: hr_employee_age
+#. odoo-python
+#: code:addons/hr_employee_age/models/hr_employee.py:0
+msgid "Operation not supported"
+msgstr ""
