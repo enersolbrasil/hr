@@ -62,6 +62,18 @@
                         readonly="state not in ['draft','accepted']"
                     />
                 </group>
+                <group
+                    name="employee_signature"
+                    string="Employee Signature"
+                    invisible="not is_ppe"
+                >
+                    <field
+                        name="employee_signature"
+                        readonly="state not in ['draft','accepted']"
+                        widget="signature"
+                    />
+                    <field name="signed_on" invisible="not signed_on" />
+                </group>
             </xpath>
         </field>
     </record>

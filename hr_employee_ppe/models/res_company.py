@@ -13,6 +13,10 @@ class ResCompany(models.Model):
         help="Prevent accepting requests and validating allocations of PPE whose "
         "certification has expired.",
     )
+    ppe_require_signature = fields.Boolean(
+        string="Require PPE Signature",
+        help="PPE can only be validated once the employee has signed their delivery.",
+    )
     ppe_expiry_notice_days = fields.Integer(
         string="PPE Expiry Notice (Days)",
         default=30,

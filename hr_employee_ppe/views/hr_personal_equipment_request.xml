@@ -36,6 +36,22 @@
                 <field name="expiry_date" />
                 <field name="certification" groups="hr.group_hr_user" />
             </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page
+                    name="employee_signature"
+                    string="Employee Signature"
+                    invisible="not contains_ppe"
+                >
+                    <group>
+                        <field
+                            name="employee_signature"
+                            readonly="state == 'cancelled'"
+                            widget="signature"
+                        />
+                        <field name="signed_on" invisible="not signed_on" />
+                    </group>
+                </page>
+            </xpath>
         </field>
     </record>
 </odoo>

@@ -1,14 +1,19 @@
 # Copyright 2021 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class HrPersonalEquipmentRequest(models.Model):
-    _inherit = "hr.personal.equipment.request"
+    _name = "hr.personal.equipment.request"
+    _inherit = [
+        "hr.personal.equipment.request",
+        "hr.personal.equipment.signature.mixin",
+    ]
 
     contains_ppe = fields.Boolean(compute="_compute_contains_ppe")
 
+    @api.depends("line_ids.is_ppe")
     def _compute_contains_ppe(self):
         for rec in self:
             contains_ppe = False

@@ -19,6 +19,12 @@
                         <field name="ppe_block_expired_certification" />
                     </setting>
                     <setting
+                        id="ppe_require_signature_setting"
+                        help="Validate the PPE only once the employee has signed their delivery."
+                    >
+                        <field name="ppe_require_signature" />
+                    </setting>
+                    <setting
                         id="ppe_expiry_notice_setting"
                         string="PPE Expiry Notice"
                         help="Schedule an activity to renew the delivered PPE before they expire."

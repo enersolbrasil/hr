@@ -10,7 +10,7 @@ from odoo.tools import format_date
 
 class HrPersonalEquipment(models.Model):
     _name = "hr.personal.equipment"
-    _inherit = ["hr.personal.equipment"]
+    _inherit = ["hr.personal.equipment", "hr.personal.equipment.signature.mixin"]
 
     is_ppe = fields.Boolean(related="product_id.is_ppe", store=True)
     indications = fields.Text(
@@ -91,8 +91,37 @@ class HrPersonalEquipment(models.Model):
             )
         return res
 
+    def _copy_request_signature(self):
+        """Sign the PPE with the signature of their request, if any."""
+        for rec in self.filtered(lambda a: a.is_ppe and not a.employee_signature):
+            request = rec.equipment_request_id
+            if request.employee_signature:
+                rec.write(
+                    {
+                        "employee_signature": request.employee_signature,
+                        "signed_on": request.signed_on,
+                    }
+                )
+
+    def _check_ppe_signature(self):
+        for rec in self:
+            company = rec.employee_id.company_id or self.env.company
+            if (
+                rec.is_ppe
+                and not rec.employee_signature
+                and company.ppe_require_signature
+            ):
+                raise UserError(
+                    self.env._(
+                        "The employee must sign the delivery of %s.",
+                        rec.product_id.display_name,
+                    )
+                )
+
     def validate_allocation(self):
         self._check_ppe_certification()
+        self._copy_request_signature()
+        self._check_ppe_signature()
         res = super().validate_allocation()
         self._check_dates()
         return res
@@ -143,6 +172,12 @@ class HrPersonalEquipment(models.Model):
         )
 
     def write(self, vals):
+        if "employee_signature" in vals and any(
+            rec.state not in ("draft", "accepted") for rec in self
+        ):
+            raise UserError(
+                self.env._("The signature of a delivered equipment cannot be changed.")
+            )
         if "expiry_date" in vals and "expiry_notice_sent" not in vals:
             # a new expiry date deserves a new notice
             vals = dict(vals, expiry_notice_sent=False)

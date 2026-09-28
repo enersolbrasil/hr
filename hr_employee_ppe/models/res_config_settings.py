@@ -10,6 +10,9 @@ class ResConfigSettings(models.TransientModel):
     ppe_block_expired_certification = fields.Boolean(
         related="company_id.ppe_block_expired_certification", readonly=False
     )
+    ppe_require_signature = fields.Boolean(
+        related="company_id.ppe_require_signature", readonly=False
+    )
     ppe_expiry_notice_days = fields.Integer(
         related="company_id.ppe_expiry_notice_days", readonly=False
     )

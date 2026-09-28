@@ -9,6 +9,12 @@ from odoo import fields
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase
 
+# a transparent 1x1 PNG image
+SIGNATURE = (
+    b"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42"
+    b"mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+)
+
 
 class TestHREmployeePPE(TransactionCase):
     def setUp(self):
@@ -297,6 +303,40 @@ class TestHREmployeePPE(TransactionCase):
         self.assertTrue(allocation.expiry_notice_sent)
         allocation.expiry_date = allocation.expiry_date + timedelta(days=365)
         self.assertFalse(allocation.expiry_notice_sent)
+
+    def test_signature_date(self):
+        allocation = self.hr_employee_ppe_expirable
+        allocation.employee_signature = SIGNATURE
+        self.assertTrue(allocation.signed_on)
+        allocation.employee_signature = False
+        self.assertFalse(allocation.signed_on)
+
+    def test_request_signature_copied_to_ppe(self):
+        request = self.personal_equipment_request
+        request.employee_signature = SIGNATURE
+        self.assertTrue(request.signed_on)
+        request.accept_request()
+        allocation = self.hr_employee_ppe_expirable
+        allocation.validate_allocation()
+        self.assertEqual(allocation.employee_signature, request.employee_signature)
+        self.assertEqual(allocation.signed_on, request.signed_on)
+
+    def test_signature_required(self):
+        self.employee.company_id.ppe_require_signature = True
+        self.personal_equipment_request.accept_request()
+        allocation = self.hr_employee_ppe_expirable
+        with self.assertRaises(UserError):
+            allocation.validate_allocation()
+        allocation.employee_signature = SIGNATURE
+        allocation.validate_allocation()
+        self.assertEqual(allocation.state, "valid")
+
+    def test_signature_locked_once_delivered(self):
+        allocation = self.hr_employee_ppe_expirable
+        allocation.employee_signature = SIGNATURE
+        allocation.validate_allocation()
+        with self.assertRaises(UserError):
+            allocation.employee_signature = False
 
     def test_check_dates(self):
         with self.assertRaises(ValidationError):

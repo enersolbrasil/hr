@@ -59,6 +59,8 @@ Protective Equipment*:
 - *Block PPE with Expired Certification*: when checked (the default),
   requests and allocations of PPE whose certification has expired cannot
   be accepted or validated.
+- *Require PPE Signature*: when checked, the PPE allocations can only be
+  validated once the employee has signed their delivery.
 - *PPE Expiry Notice*: number of days before the expiry date of a
   delivered PPE to schedule a *PPE Renewal* activity (30 by default, 0
   to schedule none), and the user in charge of these activities. When no
@@ -74,6 +76,13 @@ date of its certification. The certification number is copied to the
 allocations when they are created, so each allocation keeps the
 certification of the PPE that was actually delivered, even after the
 certification of the product is renewed.
+
+The employee can sign the delivery of their PPE, either once for the
+whole request, in the *Employee Signature* tab of the request, or on
+each allocation. The date of the signature is recorded, the signature of
+the request is copied to its PPE allocations when they are validated,
+and the signature of an allocation cannot be changed once it has been
+validated.
 
 Bug Tracker
 ===========
