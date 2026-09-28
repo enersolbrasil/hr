@@ -1,7 +1,7 @@
 # Copyright 2021 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import api, fields, models
+from odoo import Command, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -45,8 +45,9 @@ class HrPersonalEquipment(models.Model):
         for line in self:
             qty = 0.0
             for move in line.move_ids.filtered(
-                lambda r, line=line: r.state == "done"
-                and line.product_id == r.product_id
+                lambda r, line=line: (
+                    r.state == "done" and line.product_id == r.product_id
+                )
             ):
                 qty += move.product_uom._compute_quantity(
                     move.product_uom_qty, line.product_uom_id
@@ -79,9 +80,20 @@ class HrPersonalEquipment(models.Model):
         equipment request. procurement group will launch '_run_move',
         '_run_buy' or '_run_manufacture'
         depending on the stock request product rule.
+
+        When the company of the employee has an operation type for personal
+        equipment, the allocations are delivered with a transfer of that type
+        instead.
         """
+        transferred = self.filtered(
+            lambda a: (
+                not a.skip_procurement
+                and a._get_company().personal_equipment_picking_type_id
+            )
+        )
+        transferred._create_personal_equipment_transfers()
         errors = []
-        for allocation in self:
+        for allocation in self - transferred:
             if allocation.skip_procurement:
                 continue
 
@@ -108,6 +120,67 @@ class HrPersonalEquipment(models.Model):
         if errors:
             raise UserError("\n".join(errors))
         return True
+
+    def _create_personal_equipment_transfers(self):
+        """Deliver the allocations with one transfer per request, from the
+        default source location of the operation type to the request location.
+        """
+        pickings = self.env["stock.picking"]
+        for request in self.equipment_request_id:
+            allocations = self.filtered(
+                lambda a, request=request: a.equipment_request_id == request
+            )
+            company = allocations[:1]._get_company()
+            # We create the transfers with sudo, like the procurement rules,
+            # because the user accepting the request may not be a stock user.
+            picking = (
+                self.env["stock.picking"]
+                .sudo()
+                .create(allocations._prepare_personal_equipment_picking_vals())
+            )
+            picking.action_confirm()
+            picking.action_assign()
+            if company.personal_equipment_auto_validate:
+                picking._personal_equipment_auto_validate()
+            pickings |= picking
+        return pickings
+
+    def _prepare_personal_equipment_picking_vals(self):
+        """Values of the transfer delivering the allocations of one request."""
+        request = self.equipment_request_id
+        company = self[:1]._get_company()
+        picking_type = company.personal_equipment_picking_type_id
+        employee = request.employee_id
+        return {
+            "picking_type_id": picking_type.id,
+            "location_id": picking_type.default_location_src_id.id,
+            "location_dest_id": request.location_id.id,
+            "partner_id": (employee.user_id.partner_id or employee.work_contact_id).id,
+            "origin": request.name,
+            "group_id": request.procurement_group_id.id,
+            "company_id": company.id,
+            "move_ids": [
+                Command.create(allocation._prepare_personal_equipment_move_vals())
+                for allocation in self
+            ],
+        }
+
+    def _prepare_personal_equipment_move_vals(self):
+        self.ensure_one()
+        request = self.equipment_request_id
+        company = self._get_company()
+        picking_type = company.personal_equipment_picking_type_id
+        return {
+            "name": request.name,
+            "product_id": self.product_id.id,
+            "product_uom_qty": self.quantity,
+            "product_uom": (self.product_uom_id or self.product_id.uom_id).id,
+            "location_id": picking_type.default_location_src_id.id,
+            "location_dest_id": request.location_id.id,
+            "group_id": request.procurement_group_id.id,
+            "personal_equipment_id": self.id,
+            "company_id": company.id,
+        }
 
     def _accept_request(self):
         res = super()._accept_request()

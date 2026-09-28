@@ -210,6 +210,51 @@ class TestHRPersonalEquipment(TransactionCase):
         self.assertEqual(allocation.qty_delivered, allocation.quantity - 1)
         self.assertEqual(allocation.state, "valid")
 
+    # direct transfers
+
+    def _set_direct_transfers(self, auto_validate=False):
+        picking_type = self.warehouse.int_type_id
+        picking_type.default_location_src_id = self.ressuply_loc
+        self.company.write(
+            {
+                "personal_equipment_picking_type_id": picking_type.id,
+                "personal_equipment_auto_validate": auto_validate,
+            }
+        )
+        return picking_type
+
+    def test_direct_transfer(self):
+        picking_type = self._set_direct_transfers()
+        self.personal_equipment_request.accept_request()
+        picking = self.personal_equipment_request.picking_ids
+        self.assertEqual(len(picking), 1)
+        self.assertEqual(picking.picking_type_id, picking_type)
+        self.assertEqual(picking.location_id, self.ressuply_loc)
+        self.assertEqual(picking.location_dest_id, self.location_employee)
+        allocation = self.personal_equipment_request.line_ids[0]
+        self.assertEqual(picking.move_ids.personal_equipment_id, allocation)
+        self.assertEqual(picking.move_ids.product_uom_qty, allocation.quantity)
+        self.assertNotEqual(picking.state, "done")
+        self.assertEqual(allocation.state, "accepted")
+
+    def test_direct_transfer_auto_validate(self):
+        self._set_direct_transfers(auto_validate=True)
+        self.personal_equipment_request.accept_request()
+        picking = self.personal_equipment_request.picking_ids
+        self.assertEqual(picking.state, "done")
+        allocation = self.personal_equipment_request.line_ids[0]
+        self.assertEqual(allocation.qty_delivered, allocation.quantity)
+        self.assertEqual(allocation.state, "valid")
+
+    def test_direct_transfer_auto_validate_unreserved(self):
+        self._set_direct_transfers(auto_validate=True)
+        # a storable product without stock cannot be reserved
+        self.product_personal_equipment_1.is_storable = True
+        self.personal_equipment_request.accept_request()
+        picking = self.personal_equipment_request.picking_ids
+        self.assertNotEqual(picking.state, "done")
+        self.assertEqual(self.personal_equipment_request.line_ids[0].state, "accepted")
+
     def test_action_view_pickings(self):
         action = self.personal_equipment_request.action_view_pickings()
         self.assertEqual(action["name"], "Transfers")

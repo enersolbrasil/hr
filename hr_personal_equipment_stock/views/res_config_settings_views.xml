@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Enersol Brasil
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field
+            name="name"
+        >res.config.settings.form (in hr_personal_equipment_stock)</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr']" position="inside">
+                <block
+                    title="Personal Equipment Delivery"
+                    name="personal_equipment_stock_setting_container"
+                >
+                    <setting
+                        id="personal_equipment_picking_type_setting"
+                        string="Direct Transfers"
+                        help="Deliver the accepted equipment requests with a transfer of this operation type, from its default source location, instead of running the procurement rules."
+                    >
+                        <field name="company_id" invisible="1" />
+                        <field
+                            name="personal_equipment_picking_type_id"
+                            domain="[('company_id', '=', company_id)]"
+                        />
+                        <div
+                            class="mt-2"
+                            invisible="not personal_equipment_picking_type_id"
+                        >
+                            <field name="personal_equipment_auto_validate" />
+                            <label
+                                for="personal_equipment_auto_validate"
+                                class="o_light_label"
+                            />
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>
