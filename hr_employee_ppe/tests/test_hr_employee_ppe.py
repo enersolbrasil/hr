@@ -79,14 +79,26 @@ class TestHREmployeePPE(TransactionCase):
         self.hr_employee_ppe_expirable = self.personal_equipment_request.line_ids[0]
         self.hr_employee_ppe_no_expirable = self.personal_equipment_request.line_ids[1]
 
-    def test_compute_fields(self):
-        self.hr_employee_ppe_expirable._compute_fields()
+    def test_ppe_data_from_product(self):
         self.assertTrue(self.hr_employee_ppe_expirable.is_ppe)
         self.assertTrue(self.hr_employee_ppe_expirable.expire_ppe)
         self.assertEqual(
             self.hr_employee_ppe_expirable.indications,
             self.product_employee_ppe_expirable.indications,
         )
+        self.assertTrue(self.hr_employee_ppe_no_expirable.is_ppe)
+        self.assertFalse(self.hr_employee_ppe_no_expirable.expire_ppe)
+
+    def test_ppe_data_follows_product_changes(self):
+        allocation = self.hr_employee_ppe_expirable
+        self.product_employee_ppe_expirable.write(
+            {"is_ppe": False, "indications": "New indications"}
+        )
+        self.assertFalse(allocation.is_ppe)
+        self.assertEqual(allocation.indications, "New indications")
+        # whether the allocation expires can still be decided per allocation
+        allocation.expire_ppe = False
+        self.assertFalse(allocation.expire_ppe)
 
     def test_accept_allocation(self):
         self.assertFalse(self.hr_employee_ppe_expirable.issued_by)
@@ -161,7 +173,6 @@ class TestHREmployeePPE(TransactionCase):
         with self.assertRaises(ValidationError):
             self.hr_employee_ppe_expirable.start_date = "2020-01-01"
             self.hr_employee_ppe_expirable.expiry_date = "2019-12-31"
-            self.hr_employee_ppe_expirable._compute_fields()
             self.hr_employee_ppe_expirable.validate_allocation()
 
     def test_compute_contains_ppe(self):

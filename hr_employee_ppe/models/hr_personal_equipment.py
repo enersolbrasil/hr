@@ -11,11 +11,18 @@ class HrPersonalEquipment(models.Model):
     _name = "hr.personal.equipment"
     _inherit = ["hr.personal.equipment"]
 
-    is_ppe = fields.Boolean()
+    is_ppe = fields.Boolean(related="product_id.is_ppe", store=True)
     indications = fields.Text(
+        related="product_id.indications",
+        store=True,
         help="Situations in which the employee should use this equipment.",
     )
-    expire_ppe = fields.Boolean(help="True if the PPE expires")
+    expire_ppe = fields.Boolean(
+        compute="_compute_expire_ppe",
+        store=True,
+        readonly=False,
+        help="True if the PPE expires",
+    )
     certification = fields.Char(
         string="Certification Number", help="Certification Number"
     )
@@ -26,15 +33,10 @@ class HrPersonalEquipment(models.Model):
         res["issued_by"] = self.env.user.id
         return res
 
-    @api.onchange("product_id")
-    def _compute_fields(self):
+    @api.depends("product_id")
+    def _compute_expire_ppe(self):
         for rec in self:
-            if rec.product_id.is_ppe:
-                rec.is_ppe = rec.product_id.is_ppe
-                if rec.product_id.expirable_ppe:
-                    rec.expire_ppe = rec.product_id.expirable_ppe
-                if rec.product_id.indications:
-                    rec.indications = rec.product_id.indications
+            rec.expire_ppe = rec.product_id.expirable_ppe
 
     def _validate_allocation_vals(self):
         res = super()._validate_allocation_vals()
