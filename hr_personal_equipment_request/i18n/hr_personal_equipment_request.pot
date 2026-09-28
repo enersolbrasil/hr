@@ -14,6 +14,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: hr_personal_equipment_request
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_kanban_view
+msgid "<i class=\"fa fa-calendar-check-o me-1\" role=\"img\" aria-label=\"Start Date\"/>"
+msgstr ""
+
+#. module: hr_personal_equipment_request
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_kanban_view
+msgid "<i class=\"fa fa-hourglass-end me-1\" role=\"img\" aria-label=\"Expiry Date\"/>"
+msgstr ""
+
+#. module: hr_personal_equipment_request
 #: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_request_form_view
 msgid "Accept"
 msgstr ""
@@ -152,6 +162,11 @@ msgid "Employee Personal Equipment"
 msgstr ""
 
 #. module: hr_personal_equipment_request
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
+msgid "Equipment"
+msgstr ""
+
+#. module: hr_personal_equipment_request
 #. odoo-python
 #: code:addons/hr_personal_equipment_request/models/hr_employee.py:0
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_employee__equipment_request_ids
@@ -162,6 +177,11 @@ msgstr ""
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_employee__equipment_request_count
 msgid "Equipment Request Count"
+msgstr ""
+
+#. module: hr_personal_equipment_request
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
+msgid "Equipment Requests"
 msgstr ""
 
 #. module: hr_personal_equipment_request
@@ -177,6 +197,7 @@ msgstr ""
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__expiry_date
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_kanban_view
 msgid "Expiry Date"
 msgstr ""
 
@@ -342,16 +363,6 @@ msgid "Observations"
 msgstr ""
 
 #. module: hr_personal_equipment_request
-#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
-msgid "PE"
-msgstr ""
-
-#. module: hr_personal_equipment_request
-#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_employee_form_view
-msgid "PE Request"
-msgstr ""
-
-#. module: hr_personal_equipment_request
 #. odoo-python
 #: code:addons/hr_personal_equipment_request/models/hr_employee.py:0
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_employee__personal_equipment_ids
@@ -399,6 +410,7 @@ msgstr ""
 
 #. module: hr_personal_equipment_request
 #: model:ir.model.fields,field_description:hr_personal_equipment_request.field_hr_personal_equipment__start_date
+#: model_terms:ir.ui.view,arch_db:hr_personal_equipment_request.hr_personal_equipment_kanban_view
 msgid "Start Date"
 msgstr ""
 
