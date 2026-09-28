@@ -84,6 +84,9 @@ the request is copied to its PPE allocations when they are validated,
 and the signature of an allocation cannot be changed once it has been
 validated.
 
+The PPE delivered to an employee, with their certification number and
+expiry date, are listed in the *PPE* tab of the employee form.
+
 Bug Tracker
 ===========
 

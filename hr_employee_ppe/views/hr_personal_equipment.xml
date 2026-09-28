@@ -77,6 +77,31 @@
             </xpath>
         </field>
     </record>
+    <record id="hr_personal_equipment_kanban_view" model="ir.ui.view">
+        <field name="name">hr.personal.equipment.kanban (in hr_employee_ppe)</field>
+        <field name="model">hr.personal.equipment</field>
+        <field
+            name="inherit_id"
+            ref="hr_personal_equipment_request.hr_personal_equipment_kanban_view"
+        />
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <div
+                    t-if="record.certification.raw_value"
+                    name="certification"
+                    class="small"
+                    title="Certification Number"
+                >
+                    <i
+                        class="fa fa-certificate me-1"
+                        role="img"
+                        aria-label="Certification Number"
+                    />
+                    <field name="certification" />
+                </div>
+            </field>
+        </field>
+    </record>
     <record id="hr_personal_equipment_form_view_base_user" model="ir.ui.view">
         <field name="name">hr.personal.equipment.form (in hr_employee_ppe)</field>
         <field name="model">hr.personal.equipment</field>

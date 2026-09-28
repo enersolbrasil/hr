@@ -15,6 +15,7 @@
         "views/product_template.xml",
         "views/hr_personal_equipment.xml",
         "views/hr_personal_equipment_request.xml",
+        "views/hr_employee_views.xml",
         "views/res_config_settings_views.xml",
         "data/mail_activity_type_data.xml",
         "data/hr_employee_ppe_cron.xml",

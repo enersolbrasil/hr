@@ -338,6 +338,16 @@ class TestHREmployeePPE(TransactionCase):
         with self.assertRaises(UserError):
             allocation.employee_signature = False
 
+    def test_employee_ppe(self):
+        employee = self.employee
+        self.assertFalse(employee.ppe_ids)
+        self.personal_equipment_request.accept_request()
+        employee.invalidate_recordset(["ppe_ids"])
+        self.assertEqual(employee.ppe_ids, self.personal_equipment_request.line_ids)
+        self.personal_equipment_request.line_ids.write({"state": "cancelled"})
+        employee.invalidate_recordset(["ppe_ids"])
+        self.assertFalse(employee.ppe_ids)
+
     def test_check_dates(self):
         with self.assertRaises(ValidationError):
             self.hr_employee_ppe_expirable.start_date = "2020-01-01"
