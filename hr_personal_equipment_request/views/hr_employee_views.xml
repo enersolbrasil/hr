@@ -16,7 +16,7 @@
                 >
                     <field
                         name="equipment_request_count"
-                        string="PE Request"
+                        string="Equipment Requests"
                         widget="statinfo"
                     />
                 </button>
@@ -28,7 +28,7 @@
                 >
                     <field
                         name="personal_equipment_count"
-                        string="PE"
+                        string="Equipment"
                         widget="statinfo"
                     />
                 </button>
