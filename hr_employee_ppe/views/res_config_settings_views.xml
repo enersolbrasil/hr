@@ -18,6 +18,28 @@
                     >
                         <field name="ppe_block_expired_certification" />
                     </setting>
+                    <setting
+                        id="ppe_expiry_notice_setting"
+                        string="PPE Expiry Notice"
+                        help="Schedule an activity to renew the delivered PPE before they expire."
+                    >
+                        <div class="content-group">
+                            <div class="mt-2">
+                                <field
+                                    name="ppe_expiry_notice_days"
+                                    class="oe_inline"
+                                />
+                                <span class="ms-1">days before the expiry date</span>
+                            </div>
+                            <div class="mt-2" invisible="not ppe_expiry_notice_days">
+                                <label
+                                    for="ppe_expiry_responsible_id"
+                                    class="o_light_label me-2"
+                                />
+                                <field name="ppe_expiry_responsible_id" />
+                            </div>
+                        </div>
+                    </setting>
                 </block>
             </xpath>
         </field>

@@ -240,6 +240,64 @@ class TestHREmployeePPE(TransactionCase):
         allocation.cron_ppe_expiry_verification()
         self.assertEqual(allocation.state, "cancelled")
 
+    def _deliver_expiring_ppe(self, days):
+        """Deliver the expirable PPE with an expiry date in ``days`` days."""
+        allocation = self.hr_employee_ppe_expirable
+        self.personal_equipment_request.accept_request()
+        today = fields.Date.context_today(allocation)
+        allocation.write(
+            {"start_date": today, "expiry_date": today + timedelta(days=days)}
+        )
+        allocation.validate_allocation()
+        return allocation
+
+    def test_cron_schedules_renewal_activity(self):
+        allocation = self._deliver_expiring_ppe(10)
+        allocation.cron_ppe_expiry_verification()
+        activity = allocation.activity_ids
+        self.assertEqual(len(activity), 1)
+        self.assertEqual(
+            activity.activity_type_id,
+            self.env.ref("hr_employee_ppe.mail_activity_type_ppe_renewal"),
+        )
+        self.assertEqual(activity.date_deadline, allocation.expiry_date)
+        # the user who accepted the request is in charge by default
+        self.assertEqual(activity.user_id, self.user)
+        self.assertTrue(allocation.expiry_notice_sent)
+        # the activity is not scheduled again once done
+        activity.action_done()
+        allocation.cron_ppe_expiry_verification()
+        self.assertFalse(allocation.activity_ids)
+
+    def test_cron_renewal_activity_responsible(self):
+        responsible = self.env["res.users"].create(
+            {"name": "PPE Responsible", "login": "ppe.responsible@test.com"}
+        )
+        self.employee.company_id.ppe_expiry_responsible_id = responsible
+        allocation = self._deliver_expiring_ppe(10)
+        allocation.cron_ppe_expiry_verification()
+        self.assertEqual(allocation.activity_ids.user_id, responsible)
+
+    def test_cron_renewal_activity_outside_notice_period(self):
+        self.employee.company_id.ppe_expiry_notice_days = 5
+        allocation = self._deliver_expiring_ppe(10)
+        allocation.cron_ppe_expiry_verification()
+        self.assertFalse(allocation.activity_ids)
+        self.assertFalse(allocation.expiry_notice_sent)
+
+    def test_cron_renewal_activity_disabled(self):
+        self.employee.company_id.ppe_expiry_notice_days = 0
+        allocation = self._deliver_expiring_ppe(10)
+        allocation.cron_ppe_expiry_verification()
+        self.assertFalse(allocation.activity_ids)
+
+    def test_new_expiry_date_resets_renewal_notice(self):
+        allocation = self._deliver_expiring_ppe(10)
+        allocation.cron_ppe_expiry_verification()
+        self.assertTrue(allocation.expiry_notice_sent)
+        allocation.expiry_date = allocation.expiry_date + timedelta(days=365)
+        self.assertFalse(allocation.expiry_notice_sent)
+
     def test_check_dates(self):
         with self.assertRaises(ValidationError):
             self.hr_employee_ppe_expirable.start_date = "2020-01-01"

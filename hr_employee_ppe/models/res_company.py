@@ -13,3 +13,16 @@ class ResCompany(models.Model):
         help="Prevent accepting requests and validating allocations of PPE whose "
         "certification has expired.",
     )
+    ppe_expiry_notice_days = fields.Integer(
+        string="PPE Expiry Notice (Days)",
+        default=30,
+        help="Number of days before the expiry of a delivered PPE to schedule an "
+        "activity to renew it. Set 0 to schedule no activity.",
+    )
+    ppe_expiry_responsible_id = fields.Many2one(
+        comodel_name="res.users",
+        string="PPE Renewal Responsible",
+        help="User in charge of renewing the PPE that are about to expire. When "
+        "empty, the activity is assigned to the user who accepted the request, "
+        "or else to the manager of the employee.",
+    )
