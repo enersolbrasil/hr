@@ -22,5 +22,7 @@ and click "Validate".
 A common user can only see its own allocations. The HR Officer can see
 all of them.
 
+The allocations can also be followed in a kanban view, grouped by state.
+
 If needed, the allocation can be expired clicking the button "Expire",
 which can be found at the allocation form view.

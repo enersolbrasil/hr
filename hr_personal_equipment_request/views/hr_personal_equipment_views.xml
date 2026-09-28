@@ -91,6 +91,50 @@
             </list>
         </field>
     </record>
+    <record model="ir.ui.view" id="hr_personal_equipment_kanban_view">
+        <field
+            name="name"
+        >hr.personal.equipment.kanban (in hr_personal_equipment_request)</field>
+        <field name="model">hr.personal.equipment</field>
+        <field name="arch" type="xml">
+            <kanban create="0" default_group_by="state" sample="1">
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex">
+                            <field name="product_id" class="fw-bold" />
+                            <span class="ms-auto text-nowrap">
+                                <field name="quantity" />
+                                <field name="product_uom_id" class="ms-1" />
+                            </span>
+                        </div>
+                        <field name="employee_id" groups="hr.group_hr_user" />
+                        <footer name="dates" class="small text-muted">
+                            <span t-if="record.start_date.raw_value" title="Start Date">
+                                <i
+                                    class="fa fa-calendar-check-o me-1"
+                                    role="img"
+                                    aria-label="Start Date"
+                                />
+                                <field name="start_date" />
+                            </span>
+                            <span
+                                t-if="record.expiry_date.raw_value"
+                                class="ms-auto"
+                                title="Expiry Date"
+                            >
+                                <i
+                                    class="fa fa-hourglass-end me-1"
+                                    role="img"
+                                    aria-label="Expiry Date"
+                                />
+                                <field name="expiry_date" />
+                            </span>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
     <record model="ir.ui.view" id="hr_personal_equipment_search_view">
         <field
             name="name"
@@ -145,7 +189,7 @@
     <record model="ir.actions.act_window" id="hr_personal_equipment_act_window">
         <field name="name">Allocations</field>
         <field name="res_model">hr.personal.equipment</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">[]</field>
         <field name="context">{'search_default_filter_valid_state':1}</field>
     </record>

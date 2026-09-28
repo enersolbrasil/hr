@@ -52,6 +52,6 @@ class HrEmployee(models.Model):
             "type": "ir.actions.act_window",
             "res_model": "hr.personal.equipment",
             "context": {"group_by": "state"},
-            "view_mode": "list,form",
+            "view_mode": "list,kanban,form",
             "domain": [("id", "in", self.personal_equipment_ids.ids)],
         }
