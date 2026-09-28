@@ -10,4 +10,14 @@
             </field>
         </field>
     </record>
+    <record id="hr_employee_view_tree" model="ir.ui.view">
+        <field name="name">hr.employee.view.list (in hr_employee_age)</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree" />
+        <field name="arch" type="xml">
+            <field name="work_email" position="after">
+                <field name="age" optional="hide" />
+            </field>
+        </field>
+    </record>
 </odoo>
