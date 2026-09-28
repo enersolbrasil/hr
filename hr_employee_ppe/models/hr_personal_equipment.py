@@ -96,11 +96,10 @@ class HrPersonalEquipment(models.Model):
     def cron_ppe_expiry_verification(self, date_ref=None):
         if not date_ref:
             date_ref = fields.Date.context_today(self)
-        domain = []
-        domain.extend([("expiry_date", "<", date_ref)])
-        ppes_to_check_expiry = self.search(domain)
-        for record in ppes_to_check_expiry:
-            record.state = "expired"
+        # only the delivered equipment can expire
+        self.search([("state", "=", "valid"), ("expiry_date", "<", date_ref)]).write(
+            {"state": "expired"}
+        )
 
     def _check_dates(self):
         for record in self:
