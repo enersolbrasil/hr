@@ -113,6 +113,20 @@ class TestHREmployeePPE(TransactionCase):
             ),
         )
 
+    def test_validate_allocation_expirable_without_expiry_date(self):
+        allocation = self.hr_employee_ppe_no_expirable
+        allocation.expire_ppe = True
+        allocation.validate_allocation()
+        self.assertEqual(allocation.state, "valid")
+        self.assertFalse(allocation.expiry_date)
+
+    def test_validate_allocation_without_interval_type(self):
+        self.product_employee_ppe_expirable.ppe_interval_type = False
+        allocation = self.hr_employee_ppe_expirable
+        allocation.validate_allocation()
+        self.assertEqual(allocation.state, "valid")
+        self.assertFalse(allocation.expiry_date)
+
     def test_cron_ppe_expiry_verification_expired_product(self):
         self.hr_employee_ppe_expirable.start_date = "2020-01-01"
         self.hr_employee_ppe_expirable.expiry_date = "2020-12-31"
