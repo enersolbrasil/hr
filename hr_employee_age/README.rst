@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 ============
 Employee Age
 ============
@@ -13,7 +17,7 @@ Employee Age
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fhr-lightgray.png?logo=github
@@ -40,6 +44,10 @@ Usage
 
 When you add the birthday of an employee, the age of an employee will
 auto-populate.
+
+The age can also be shown as an optional column of the employee list and
+used to search employees, either from the search bar (exact age) or with
+a custom filter (for example, employees aged 18 or more).
 
 Bug Tracker
 ===========
