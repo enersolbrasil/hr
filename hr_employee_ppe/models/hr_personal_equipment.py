@@ -1,10 +1,10 @@
 # Copyright 2020 Escodoo
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from dateutil.relativedelta import relativedelta
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-
-from odoo.addons.base.models.ir_cron import _intervalTypes
 
 
 class HrPersonalEquipment(models.Model):
@@ -41,8 +41,9 @@ class HrPersonalEquipment(models.Model):
         start_date = res.get("start_date") or self.start_date
         product = self.product_id
         if not self.expiry_date and product.expirable_ppe and product.ppe_interval_type:
-            res["expiry_date"] = start_date + _intervalTypes[product.ppe_interval_type](
-                product.ppe_duration
+            # the interval types are named after the relativedelta arguments
+            res["expiry_date"] = start_date + relativedelta(
+                **{product.ppe_interval_type: product.ppe_duration}
             )
         return res
 

@@ -3,10 +3,10 @@
 
 from datetime import date, datetime, timedelta
 
+from dateutil.relativedelta import relativedelta
+
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase
-
-from odoo.addons.base.models.ir_cron import _intervalTypes
 
 
 class TestHREmployeePPE(TransactionCase):
@@ -107,11 +107,18 @@ class TestHREmployeePPE(TransactionCase):
         self.hr_employee_ppe_expirable.validate_allocation()
         self.assertEqual(
             self.hr_employee_ppe_expirable.expiry_date,
-            date.today()
-            + _intervalTypes[self.product_employee_ppe_expirable.ppe_interval_type](
-                self.product_employee_ppe_expirable.ppe_duration
-            ),
+            self.hr_employee_ppe_expirable.start_date
+            + relativedelta(days=self.product_employee_ppe_expirable.ppe_duration),
         )
+
+    def test_validate_allocation_duration_in_years(self):
+        self.product_employee_ppe_expirable.write(
+            {"ppe_interval_type": "years", "ppe_duration": 2}
+        )
+        allocation = self.hr_employee_ppe_expirable
+        allocation.start_date = "2020-02-29"
+        allocation.validate_allocation()
+        self.assertEqual(allocation.expiry_date, date(2022, 2, 28))
 
     def test_validate_allocation_expirable_without_expiry_date(self):
         allocation = self.hr_employee_ppe_no_expirable

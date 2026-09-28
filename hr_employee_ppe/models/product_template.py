@@ -23,6 +23,7 @@ class ProductTemplate(models.Model):
             ("days", "Days"),
             ("weeks", "Weeks"),
             ("months", "Months"),
+            ("years", "Years"),
         ],
         string="Interval Unit",
     )
