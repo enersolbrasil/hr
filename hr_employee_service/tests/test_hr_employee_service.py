@@ -2,9 +2,9 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from datetime import date
-from unittest.mock import patch
 
 from dateutil.relativedelta import relativedelta
+from freezegun import freeze_time
 
 from odoo import fields
 from odoo.tests import common
@@ -14,7 +14,7 @@ class TestHrEmployeeService(common.TransactionCase):
     def setUp(self):
         super().setUp()
 
-        self.today = fields.Date.today()
+        self.today = fields.Date.context_today(self.env.user)
         self.now = fields.Datetime.now()
         self.Employee = self.env["hr.employee"]
         self.SudoEmployee = self.Employee.sudo()
@@ -46,6 +46,7 @@ class TestHrEmployeeService(common.TransactionCase):
         self.assertEqual(employee.service_duration_months, 0)
         self.assertEqual(employee.service_duration_days, 0)
 
+    @freeze_time("2019-08-27 12:00:00")
     def test_3(self):
         mocked_today = date(2019, 8, 27)
         employee = self.SudoEmployee.create(
@@ -56,11 +57,9 @@ class TestHrEmployeeService(common.TransactionCase):
             }
         )
 
-        with patch("odoo.fields.Date.today") as today:
-            today.return_value = mocked_today
-            self.assertEqual(employee.service_duration_years, 0)
-            self.assertEqual(employee.service_duration_months, 6)
-            self.assertEqual(employee.service_duration_days, 0)
+        self.assertEqual(employee.service_duration_years, 0)
+        self.assertEqual(employee.service_duration_months, 6)
+        self.assertEqual(employee.service_duration_days, 0)
 
     def test_4(self):
         employee = self.SudoEmployee.create(

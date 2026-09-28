@@ -65,7 +65,9 @@ class HrEmployee(models.Model):
     @api.depends("service_start_date", "service_termination_date")
     def _compute_service_duration(self):
         for record in self:
-            service_until = record.service_termination_date or fields.Date.today()
+            service_until = (
+                record.service_termination_date or fields.Date.context_today(record)
+            )
             if record.service_start_date and service_until > record.service_start_date:
                 service_since = record.service_start_date
                 service_duration = fabs(
@@ -78,7 +80,9 @@ class HrEmployee(models.Model):
     @api.depends("service_start_date", "service_termination_date")
     def _compute_service_duration_display(self):
         for record in self:
-            service_until = record.service_termination_date or fields.Date.today()
+            service_until = (
+                record.service_termination_date or fields.Date.context_today(record)
+            )
             if record.service_start_date and service_until > record.service_start_date:
                 service_duration = relativedelta(
                     service_until, record.service_start_date
