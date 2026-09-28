@@ -7,6 +7,7 @@
                     <div class="page">
                         <h3
                             class="text-center"
+                            name="title"
                         >Receipt of Personal Protection Equipment</h3>
                         <br />
                         <div name="employee_name">
@@ -17,54 +18,86 @@
                         </u> with the following Personal Protection Equipment (PPE):
                         </div>
                         <br />
-                        <table class="table table-condensed">
+                        <table class="table table-sm" name="ppe_lines">
+                            <thead>
+                                <tr>
+                                    <th name="th_product">Product</th>
+                                    <th
+                                        name="th_certification"
+                                    >Certification Number</th>
+                                    <th
+                                        name="th_quantity"
+                                        class="text-end"
+                                    >Quantity</th>
+                                    <th name="th_start_date">Delivery Date</th>
+                                    <th name="th_expiry_date">Expiry Date</th>
+                                    <th name="th_indications">Indications</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                <div>
-                                    <t>
-                                        <tr>
-                                            <th>
-                                           Product
-                                       </th>
-                                            <th>
-                                           Quantity
-                                       </th>
-                                            <th>
-                                           Indications
-                                       </th>
-                                        </tr>
-                                        <tr
-                                            t-foreach="doc.line_ids"
-                                            t-as="line"
-                                            t-if="line.is_ppe"
-                                        >
-                                            <td>
-                                                <t t-out="line.product_id.name" />
-                                            </td>
-                                            <td>
-                                                <t t-out="line.quantity" />
-                                            </td>
-                                            <td>
-                                                <t t-out="line.indications" />
-                                            </td>
-                                        </tr>
-                                    </t>
-                                </div>
+                                <tr
+                                    t-foreach="doc.line_ids.filtered('is_ppe')"
+                                    t-as="line"
+                                >
+                                    <td name="td_product">
+                                        <t t-out="line.product_id.name" />
+                                    </td>
+                                    <td name="td_certification">
+                                        <t t-out="line.certification" />
+                                    </td>
+                                    <td name="td_quantity" class="text-end">
+                                        <t t-out="line.quantity" />
+                                    </td>
+                                    <td name="td_start_date">
+                                        <span t-field="line.start_date" />
+                                    </td>
+                                    <td name="td_expiry_date">
+                                        <span t-field="line.expiry_date" />
+                                    </td>
+                                    <td name="td_indications">
+                                        <t t-out="line.indications" />
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
-                        <p>
+                        <p name="acceptance">
                             I, the undersigned accept the PPE that my employer is providing to me. I further acknowledge that I have been instructed
                             in how to wear and maintain it. If it is lost or damaged, I will report the same to my employer promptly for replacement.
                         </p>
-                        <p>
+                        <p name="commitment">
                             I agree to wear the equipment when facing the exposure it is designed to protect against.
                             I acknowledge that my failure to do so may subject me to disciplinary action.
                         </p>
-                        <div class="row">
-                            <div class="col-4 text-left">
+                        <t
+                            t-set="signed_line"
+                            t-value="doc.line_ids.filtered('employee_signature')[:1]"
+                        />
+                        <t
+                            t-set="signature"
+                            t-value="doc.employee_signature or signed_line.employee_signature"
+                        />
+                        <t
+                            t-set="signed_on"
+                            t-value="doc.signed_on if doc.employee_signature else signed_line.signed_on"
+                        />
+                        <div class="row mt-4" name="signature">
+                            <div class="col-6 text-start">
                                 <span>Signature:</span>
+                                <div t-if="signature">
+                                    <img
+                                        t-att-src="image_data_uri(signature)"
+                                        style="max-height: 4rem;"
+                                        alt="Signature"
+                                    />
+                                </div>
                             </div>
-                            <div class="col-4 text-right">
+                            <div class="col-6 text-end">
                                 <span>Date:</span>
+                                <span
+                                    t-if="signed_on"
+                                    t-out="signed_on"
+                                    t-options="{'widget': 'datetime', 'hide_seconds': True}"
+                                />
                             </div>
                         </div>
                     </div>

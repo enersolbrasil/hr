@@ -399,6 +399,24 @@ class TestHREmployeePPE(TransactionCase):
         personal_equipment_request._compute_contains_ppe()
         self.assertTrue(personal_equipment_request.contains_ppe)
 
+    def test_ppe_report_content(self):
+        self.env.company.external_report_layout_id = self.env.ref(
+            "web.external_layout_standard"
+        ).id
+        self.hr_employee_ppe_expirable.certification = "12345"
+        self.personal_equipment_request.employee_signature = SIGNATURE
+        html = (
+            self.env["ir.actions.report"]
+            ._render_qweb_html(
+                "hr_employee_ppe.hr_employee_ppe_report",
+                self.personal_equipment_request.ids,
+            )[0]
+            .decode()
+        )
+        self.assertIn(self.product_employee_ppe_expirable.name, html)
+        self.assertIn("12345", html)
+        self.assertIn("data:image/png;base64", html)
+
     def test_action_view_ppe_report(self):
         self.env.company.external_report_layout_id = self.env.ref(
             "web.external_layout_standard"
