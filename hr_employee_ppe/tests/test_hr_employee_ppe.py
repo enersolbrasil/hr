@@ -191,7 +191,7 @@ class TestHREmployeePPE(TransactionCase):
             "web.external_layout_standard"
         ).id
         action = self.personal_equipment_request.action_view_ppe_report()
-        self.assertEqual(action["name"], "Receipt of Personal protection Equipment")
+        self.assertEqual(action["name"], "Receipt of Personal Protection Equipment")
         self.assertEqual(len(action["context"]["active_ids"]), 1)
         self.assertEqual(
             action["context"]["active_ids"][0], self.personal_equipment_request.id
